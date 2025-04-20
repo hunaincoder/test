@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=0"
+    />
+    <title>TherapEase - Dashboard</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/img/logo.png" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="/css/feathericon.min.css" />
+
+    <!-- Fontawesome CSS -->
+    <link
+      rel="stylesheet"
+      href="/plugins/fontawesome/css/fontawesome.min.css"
+    />
+    <link rel="stylesheet" href="/plugins/fontawesome/css/all.min.css" />
+
+    <!-- Datatables CSS -->
+    <link rel="stylesheet" href="/plugins/datatables/datatables.min.css" />
+    <!-- Datetimepicker CSS -->
+    <link rel="stylesheet" href="/css/bootstrap-datetimepicker.min.css" />
+
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="/plugins/select2/css/select2.min.css" />
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.min.js"></script>
+      <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+    <style>
+      .status-btn {
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .status-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      }
+      .status-btn.active {
+        transform: scale(1.05);
+        font-weight: 600;
+      }
+      .upcoming-btn {
+        background-color: #e6f8ed !important;
+        color: #28a745 !important;
+      }
+      .cancelled-btn {
+        background-color: #f8e6e6 !important;
+        color: #dc3545 !important;
+      }
+      .completed-btn {
+        background-color: #e6f0f8 !important;
+        color: #007bff !important;
+      }
+      .badge {
+        padding: 0.3em 0.6em;
+        font-size: 0.9em;
+      }
+      .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .table-avatar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .table-action .btn {
+        margin: 0 5px;
+        transition: all 0.2s ease;
+      }
+      .table-action .btn:hover {
+        transform: scale(1.1);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Header -->
+      <div class="header">
+        <!-- Logo -->
+        <div class="header-left">
+          <a href="/client/dashboard" class="logo">
+            <img src="/img/logo.png" alt="Logo" width="140" height="50" />
+          </a>
+          <a href="/client/dashboard" class="logo logo-small">
+            <img src="/img/logo-small.png" alt="Logo" width="100" height="70" />
+          </a>
+        </div>
+        <!-- /Logo -->
+
+        <a href="javascript:void(0);" id="toggle_btn">
+          <i class="fe fe-text-align-left"></i>
+        </a>
+
+        <!-- Mobile Menu Toggle -->
+        <a class="mobile_btn" id="mobile_btn">
+          <i class="fa fa-bars"></i>
+        </a>
+        <!-- /Mobile Menu Toggle -->
+
+        <!-- Header Right Menu -->
+        <ul class="nav user-menu">
+          <!-- User Menu -->
+          <li class="nav-item dropdown has-arrow">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+            </a>
+            <div class="dropdown-menu">
+              <div class="user-header">
+                <div class="avatar avatar-sm">
+                  <img
+                    src="/img/profiles/avatar-01.jpg"
+                    alt="User Image"
+                    class="avatar-img rounded-circle"
+                  />
+                </div>
+                <div class="user-text">
+                  <h6>Name</h6>
+                </div>
+              </div>
+              <a class="dropdown-item" href="/client/profile">My Profile</a>
+              <a class="dropdown-item" href="/client/logout">Logout</a>
+            </div>
+          </li>
+          <!-- /User Menu -->
+        </ul>
+        <!-- /Header Right Menu -->
+      </div>
+      <!-- /Header -->
+
+      <!-- Sidebar -->
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-inner slimscroll">
+          <div id="sidebar-menu" class="sidebar-menu">
+            <ul>
+              <li class="active">
+                <a href="/client/dashboard"
+                  ><i class="fe fe-home"></i> <span>Appointments</span></a
+                >
+              </li>
+              <li>
+                <a href="/client/profile"
+                  ><i class="fe fe-user"></i> <span>Profile</span></a
+                >
+              </li>
+              <li>
+                <a href="/client/therapist-search"
+                  ><i class="fe fe-user"></i> <span>Therapists</span></a
+                >
+              </li>
+              <li>
+                <a href="/client/accounts"
+                  ><i class="fe fe-user"></i> <span>Accounts</span></a
+                >
+              </li>
+              <li>
+                <a href="/client/invoices"
+                  ><i class="fe fe-user"></i> <span>Invoices</span></a
+                >
+              </li>
+
+              <li>
+                <a href="/client/pass-change"
+                  ><i class="fe fe-user"></i> <span>Change password</span></a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- /Sidebar -->
+
+      <!-- Page Wrapper -->
+      <div class="page-wrapper">
+        <div class="content container-fluid">
+          <div class="page-header">
+            <div class="row mt-3">
+              <!-- Upcoming Field -->
+              <div class="col-auto">
+                <a
+                  href="/client/dashboard?filter=Upcoming"
+                  class="btn btn-light btn-rounded px-4 py-2 <%= currentFilter === 'Upcoming' ? 'text-primary' : 'text-secondary' %>"
+                  style="<%= currentFilter === 'Upcoming' ? 'background-color: #e6f8ed;' : 'background-color: #f4f5f7;' %>"
+                >
+                  Upcoming
+                  <span
+                    class="badge <%= currentFilter === 'Upcoming' ? 'badge-primary' : 'badge-secondary' %>"
+                    ><%= counts.upcoming %></span
+                  >
+                </a>
+              </div>
+              <div class="col-auto">
+                <a
+                  href="/client/dashboard?filter=Cancelled"
+                  class="btn btn-light btn-rounded px-4 py-2 <%= currentFilter === 'Cancelled' ? 'text-primary' : 'text-secondary' %>"
+                  style="<%= currentFilter === 'Cancelled' ? 'background-color: #e6f8ed;' : 'background-color: #f4f5f7;' %>"
+                >
+                  Cancelled
+                  <span
+                    class="badge <%= currentFilter === 'Cancelled' ? 'badge-primary' : 'badge-secondary' %>"
+                    ><%= counts.cancelled %></span
+                  >
+                </a>
+              </div>
+              <div class="col-auto">
+                <a
+                  href="/client/dashboard?filter=Completed"
+                  class="btn btn-light btn-rounded px-4 py-2 <%= currentFilter === 'Completed' ? 'text-primary' : 'text-secondary' %>"
+                  style="<%= currentFilter === 'Completed' ? 'background-color: #e6f8ed;' : 'background-color: #f4f5f7;' %>"
+                >
+                  Completed
+                  <span
+                    class="badge <%= currentFilter === 'Completed' ? 'badge-primary' : 'badge-secondary' %>"
+                    ><%= counts.completed %></span
+                  >
+                </a>
+              </div>
+              <!-- <div class="filter-widget">
+                <form id="dateFilterForm" action="/client/dashboard" method="get">
+                  <input
+                    type="hidden"
+                    name="filter"
+                    value="<%= currentFilter %>"
+                  />
+                  <div class="cal-icon">
+                    <input
+                      type="text"
+                      class="form-control datetimepicker"
+                      name="date"
+                      placeholder="Select Date"
+                      value=""
+                    />
+                  </div>
+                </form>
+              </div> -->
+            </div>
+            <br>
+          <!-- /Page Header -->
+          <div class="col-md-7 col-lg-8 col-xl-9">
+            <div class="card">
+              <div class="card-body pt-0">
+                <!-- Tab Menu -->
+                <nav class="user-tabs mb-4">
+                  <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
+                    <li class="nav-item">
+                      <a
+                        class="nav-link active"
+                        href="#pat_appointments"
+                        data-toggle="tab"
+                        >Appointments</a
+                      >
+                    </li>
+                  </ul>
+                </nav>
+                <!-- /Tab Menu -->
+
+                <!-- Tab Content -->
+                <div class="tab-content pt-0">
+                  <!-- Appointment Tab -->
+                  <div id="pat_appointments" class="tab-pane fade show active">
+                    <div class="card card-table mb-0">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-center mb-0">
+                            <thead>
+                              <tr>
+                                <th>Doctor</th>
+                                <th>Appt Date</th>
+                                <th>Booking Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% if (appointments.length === 0) { %>
+                                <tr>
+                                  <td colspan="6" class="text-center">
+                                    No <%= currentFilter %> appointments found
+                                  </td>
+                                </tr>
+                              <% } else { %>
+                                <% appointments.forEach(function(appointment) { %>
+                                  <tr>
+                                    <td>
+                                      <h2 class="table-avatar">
+                                        <a
+                                          href="/client/therapist-profile/<%= appointment.therapistId._id %>"
+                                          class="avatar avatar-sm mr-2"
+                                        >
+                                          <img
+                                            class="avatar-img rounded-circle"
+                                            src="<%= appointment.therapistId.profilePicture || '/img/doctors/doctor-thumb-01.jpg' %>"
+                                            alt="User Image"
+                                          />
+                                        </a>
+                                        <a
+                                          href="/client/therapist-profile/<%= appointment.therapistId._id %>"
+                                        >
+                                          <%= appointment.therapistName %>
+                                          <span><%= appointment.specialty %></span>
+                                        </a>
+                                      </h2>
+                                    </td>
+                                    <td>
+                                      <%= appointment.formattedDate %>
+                                      <span class="d-block text-info"
+                                        ><%= appointment.time %></span
+                                      >
+                                    </td>
+                                    <td><%= appointment.bookingDate %></td>
+                                    <td><%= appointment.amount %></td>
+                                    <td>
+                                      <span
+                                        class="badge badge-pill <%= appointment.status === 'Scheduled' ? 'bg-success-light' : appointment.status === 'Cancelled' ? 'bg-danger-light' : 'bg-info-light' %>"
+                                      >
+                                        <%= appointment.status %>
+                                      </span>
+                                    </td>
+                                    <td class="text-right">
+                                      <div class="table-action">
+                                        <a
+                                          href="/client/invoice/<%= appointment._id %>"
+                                          class="btn btn-sm bg-primary-light"
+                                        >
+                                          <i class="fas fa-print"></i> Print
+                                        </a>
+                                        <a
+                                          href="/client/invoice/<%= appointment._id %>"
+                                          class="btn btn-sm bg-info-light"
+                                        >
+                                          <i class="far fa-eye"></i> View
+                                        </a>
+                                        <% if (appointment.canJoinCall) { %>
+                                          <a
+                                            href="/client/video-call/<%= appointment._id %>"
+                                            class="btn btn-primary"
+                                          >
+                                            Join Video Call
+                                          </a>
+                                          <% } else if
+                                          (moment().isBefore(appointment.windowStart)) { %>
+                                          <button class="btn btn-secondary" disabled>
+                                            Call available in <%=
+                                            appointment.windowStart.fromNow() %>
+                                          </button>
+                                          <% } else { %>
+                                          <button class="btn btn-secondary" disabled>
+                                            Call ended
+                                          </button>
+                                          <% } %>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                <% }); %>
+                              <% } %>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /Appointment Tab -->
+                </div>
+                <!-- Tab Content -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /Page Wrapper -->
+    </div>
+    <!-- /Main Wrapper -->
+
+    <!-- jQuery -->
+    <script src="/js/jquery-3.2.1.min.js"></script>
+
+    <!-- Bootstrap Core JS -->
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="/plugins/select2/js/select2.min.js"></script>
+
+    <!-- Datetimepicker JS -->
+    <script src="/js/moment.min.js"></script>
+    <script src="/js/bootstrap-datetimepicker.min.js"></script>
+
+    <!-- Slimscroll JS -->
+    <script src="/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Datatables JS -->
+    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/plugins/datatables/datatables.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="/js/script.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        // Initialize datepicker
+        $(".datetimepicker").datetimepicker({
+          format: "YYYY-MM-DD",
+          icons: {
+            up: "fa fa-angle-up",
+            down: "fa fa-angle-down",
+            next: "fa fa-angle-right",
+            previous: "fa fa-angle-left",
+          },
+        });
+
+        // Submit form when date is selected
+        $(".datetimepicker").on("dp.change", function () {
+          $("#dateFilterForm").submit();
+        });
+      });
+    </script>
+  </body>
+</html>
